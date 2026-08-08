@@ -1,0 +1,310 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>IntelliLife AI - Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+         ========================= -->
+
+    <aside class="sidebar">
+
+        <h2>✦ Intelli AI</h2>
+
+        <a onclick="go('dashboard.html')">
+            🏠 Dashboard
+        </a>
+
+        <a onclick="go('ai.html')">
+            🤖 AI Assistant
+        </a>
+
+        <a onclick="go('finance.html')">
+            💰 Finance
+        </a>
+
+        <a onclick="go('planner.html')">
+            📅 Planner
+        </a>
+
+        <a onclick="go('goals.html')">
+            🎯 Goals
+        </a>
+
+        <a onclick="go('settings.html')">
+            ⚙️ Settings
+        </a>
+
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN DASHBOARD
+         ========================= -->
+
+    <main class="main-dashboard">
+
+
+        <!-- =========================
+             WELCOME SECTION
+             ========================= -->
+
+        <section id="homeSection">
+
+            <h2>
+                Welcome
+                <span id="userName">
+                    User
+                </span>
+                👋
+            </h2>
+
+
+            <!-- STATS -->
+
+            <div class="stats">
+
+
+                <!-- Total Tasks -->
+
+                <div class="stat-card">
+
+                    <p>
+                        Total Tasks
+                    </p>
+
+                    <h2 id="totalTasks">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <!-- Pending -->
+
+                <div class="stat-card">
+
+                    <p>
+                        Pending
+                    </p>
+
+                    <h2 id="pendingTasks">
+                        0
+                    </h2>
+
+                </div>
+
+
+                <!-- Completed -->
+
+                <div class="stat-card">
+
+                    <p>
+                        Completed
+                    </p>
+
+                    <h2 id="completedTasks">
+                        0
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             TASK MANAGER
+             ========================= -->
+
+        <<!-- =========================
+     TASK MANAGER
+     ========================= -->
+<section id="taskSection">
+
+    <h2>Task Manager</h2>
+
+    <div class="task-input-area">
+
+        <input
+            type="text"
+            id="taskInput"
+            placeholder="Enter Task"
+        >
+
+        <button
+            onclick="addTask()"
+            class="primary-btn"
+        >
+            ➕ Add Task
+        </button>
+
+    </div>
+
+
+    <button
+        onclick="toggleTaskList()"
+        class="task-list-btn"
+    >
+        📋 Task List
+    </button>
+
+
+    <!-- TASK CONTROLS -->
+
+    <div
+        id="taskControls"
+        class="task-controls"
+        style="display: none;"
+    >
+
+        <div class="task-search-row">
+
+            <div class="search-wrapper">
+
+                <input
+                    type="text"
+                    id="taskSearch"
+                    placeholder="🔍 Search tasks..."
+                    autocomplete="off"
+                    oninput="handleTaskSearch()"
+                    onkeydown="handleSearchKey(event)"
+                >
+
+                <div
+                    id="taskSuggestions"
+                    class="task-suggestions"
+                ></div>
+
+            </div>
+
+
+            <button
+                onclick="filterTasks()"
+                class="search-btn"
+            >
+                🔍 Search
+            </button>
+
+
+            <select
+                id="taskFilter"
+                class="task-filter-select"
+                onchange="handleTaskSearch()"
+            >
+
+                <option value="all">
+                    All Tasks
+                </option>
+
+                <option value="pending">
+                    Pending
+                </option>
+
+                <option value="completed">
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- TASK LIST -->
+
+    <div
+        id="taskList"
+        style="display: none;"
+    ></div>
+
+</section>
+        <!-- =========================
+             AI ASSISTANT
+             ========================= -->
+
+        <section id="aiSection">
+
+
+            <h2>
+                🤖 AI Assistant
+            </h2>
+
+
+            <!-- Chat -->
+
+            <div
+                id="chatBox"
+                class="chat-box"
+            ></div>
+
+
+            <!-- User Input -->
+
+            <div class="ai-input-area">
+
+                <input
+                    id="userInput"
+                    placeholder="Ask AI..."
+                    onkeydown="if(event.key === 'Enter') sendMessage()"
+                >
+
+
+                <button
+                    onclick="sendMessage()"
+                >
+                    Send
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+    <script src="dashboard.js"></script>
+
+
+</body>
+
+</html>
+```
