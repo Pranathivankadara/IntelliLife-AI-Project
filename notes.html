@@ -1,25 +1,367 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Notes</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notes | IntelliLife AI</title>
+
+    <link rel="stylesheet" href="notes.css">
 </head>
 
 <body>
 
-<div id="sidebar"></div>
+    <!-- ================= SIDEBAR ================= -->
 
-<div class="main">
-  <h1>Notes</h1>
+    <!-- SIDEBAR -->
+<aside class="notes-sidebar">
 
-  <textarea id="noteInput" placeholder="Write note..."></textarea>
-  <button onclick="addNote()">Save</button>
+    <div class="notes-logo">
+        <span>✦</span>
+        IntelliLife <b>AI</b>
+    </div>
 
-  <div id="notesList"></div>
-</div>
+    <nav class="notes-nav">
 
-<script src="sidebar.js"></script>
-<script src="script.js"></script>
+        <a href="dashboard.html">
+            <span>⌂</span>
+            Dashboard
+        </a>
+
+        <a href="ai.html">
+            <span>✦</span>
+            AI Assistant
+        </a>
+
+        <a href="finance.html">
+            <span>₹</span>
+            Finance
+        </a>
+
+        <a href="notes.html" class="active">
+            <span>📝</span>
+            Notes
+        </a>
+
+        <a href="planner.html">
+            <span>▣</span>
+            Planner
+        </a>
+
+        <a href="goals.html">
+            <span>◎</span>
+            Goals
+        </a>
+
+        <a href="settings.html">
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+    <div class="notes-logout">
+        <a href="login.html">
+            <span>↪</span>
+            Logout
+        </a>
+    </div>
+
+</aside>
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="notes-main">
+
+        <!-- HEADER -->
+
+        <header class="notes-header">
+
+            <div>
+
+                <p class="notes-label">
+                    PERSONAL KNOWLEDGE
+                </p>
+
+                <h1>Notes</h1>
+
+                <p class="notes-subtitle">
+                    Capture your thoughts, ideas and important information.
+                </p>
+
+            </div>
+
+            <button
+                class="add-note-btn"
+                onclick="openNoteModal()">
+
+                + Add Note
+
+            </button>
+
+        </header>
+
+
+        <!-- ================= SEARCH ================= -->
+
+        <section class="notes-search-panel">
+
+            <div class="notes-search">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search notes..."
+                    oninput="renderNotes()"
+                >
+
+            </div>
+
+            <select
+                id="categoryFilter"
+                onchange="renderNotes()">
+
+                <option value="All">All Categories</option>
+                <option value="Study">Study</option>
+                <option value="Project">Project</option>
+                <option value="Ideas">Ideas</option>
+                <option value="Personal">Personal</option>
+
+            </select>
+
+        </section>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <section class="notes-summary">
+
+            <div class="notes-card">
+
+                <div class="notes-card-heading">
+                    <span>Total Notes</span>
+
+                    <div class="notes-icon">
+                        ▤
+                    </div>
+                </div>
+
+                <h2 id="totalNotes">0</h2>
+
+                <small>
+                    All saved notes
+                </small>
+
+            </div>
+
+
+            <div class="notes-card">
+
+                <div class="notes-card-heading">
+                    <span>Study Notes</span>
+
+                    <div class="notes-icon">
+                        📚
+                    </div>
+                </div>
+
+                <h2 id="studyNotes">0</h2>
+
+                <small>
+                    Academic notes
+                </small>
+
+            </div>
+
+
+            <div class="notes-card">
+
+                <div class="notes-card-heading">
+                    <span>Project Notes</span>
+
+                    <div class="notes-icon">
+                        💡
+                    </div>
+                </div>
+
+                <h2 id="projectNotes">0</h2>
+
+                <small>
+                    Project related
+                </small>
+
+            </div>
+
+
+            <div class="notes-card">
+
+                <div class="notes-card-heading">
+                    <span>Ideas</span>
+
+                    <div class="notes-icon">
+                        ✨
+                    </div>
+                </div>
+
+                <h2 id="ideaNotes">0</h2>
+
+                <small>
+                    Saved ideas
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= NOTES PANEL ================= -->
+
+        <section class="notes-panel">
+
+            <div class="notes-panel-header">
+
+                <div>
+
+                    <p class="panel-label">
+                        YOUR COLLECTION
+                    </p>
+
+                    <h2>My Notes</h2>
+
+                    <p class="panel-description">
+                        Your recently created and saved notes.
+                    </p>
+
+                </div>
+
+                <span id="notesCount">
+                    0 Notes
+                </span>
+
+            </div>
+
+
+            <!-- NOTE CARDS -->
+
+            <div
+                class="notes-grid"
+                id="notesContainer">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= MODAL ================= -->
+
+    <div
+        class="notes-modal"
+        id="noteModal">
+
+        <div class="notes-modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h2 id="modalTitle">
+                        Add Note
+                    </h2>
+                </div>
+
+                <button
+                    class="close-modal"
+                    onclick="closeNoteModal()">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="noteForm">
+
+                <label>
+                    Note Title
+                </label>
+
+                <input
+                    type="text"
+                    id="noteTitle"
+                    placeholder="Enter note title"
+                    required
+                >
+
+
+                <label>
+                    Category
+                </label>
+
+                <select id="noteCategory">
+
+                    <option value="Study">
+                        Study
+                    </option>
+
+                    <option value="Project">
+                        Project
+                    </option>
+
+                    <option value="Ideas">
+                        Ideas
+                    </option>
+
+                    <option value="Personal">
+                        Personal
+                    </option>
+
+                </select>
+
+
+                <label>
+                    Note Content
+                </label>
+
+                <textarea
+                    id="noteContent"
+                    placeholder="Write your note here..."
+                    required>
+                </textarea>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeNoteModal()">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        Save Note
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="notes.js"></script>
+    
 
 </body>
 </html>

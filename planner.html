@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Planner | IntelliLife AI</title>
+
+    <link rel="stylesheet" href="planner.css">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="planner-sidebar">
+
+    <div class="planner-logo">
+        <span>✦</span>
+        IntelliLife <b>AI</b>
+    </div>
+
+    <nav class="planner-nav">
+
+        <a href="dashboard.html">
+            <span>⌂</span>
+            Dashboard
+        </a>
+
+        <a href="ai.html">
+            <span>✦</span>
+            AI Assistant
+        </a>
+
+        <a href="finance.html">
+            <span>◉</span>
+            Finance
+        </a>
+
+        <a href="notes.html">
+            <span>▤</span>
+            Notes
+        </a>
+
+        <a href="planner.html" class="active">
+            <span>□</span>
+            Planner
+        </a>
+
+        <a href="goals.html">
+            <span>◎</span>
+            Goals
+        </a>
+
+        
+        <a href="settings.html">
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+    <div class="planner-logout">
+        <button onclick="logout()">
+            <span>↪</span>
+            Logout
+        </button>
+    </div>
+
+</aside>
+    <!-- ================= MAIN ================= -->
+
+    <main class="planner-main">
+
+        <!-- HEADER -->
+
+        <header class="planner-header">
+
+            <div>
+
+                <p class="planner-label">
+                    DAILY ORGANIZATION
+                </p>
+
+                <h1>Planner</h1>
+
+                <p class="planner-subtitle">
+                    Plan your day, manage tasks and stay organized.
+                </p>
+
+            </div>
+
+            <button
+                class="add-task-btn"
+                onclick="openTaskModal()">
+
+                + Add Task
+
+            </button>
+
+        </header>
+
+
+        <!-- ================= DATE NAVIGATION ================= -->
+
+        <section class="date-panel">
+
+            <button
+                class="date-arrow"
+                onclick="changeDay(-1)">
+                ‹
+            </button>
+
+            <div class="current-date">
+
+                <p id="dayName">
+                    Sunday
+                </p>
+
+                <h2 id="dateNumber">
+                    09
+                </h2>
+
+                <span id="monthYear">
+                    August 2026
+                </span>
+
+            </div>
+
+            <button
+                class="date-arrow"
+                onclick="changeDay(1)">
+                ›
+            </button>
+
+            <button
+                class="today-btn"
+                onclick="goToToday()">
+
+                Today
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <section class="planner-summary">
+
+            <div class="planner-card">
+
+                <div class="planner-card-heading">
+
+                    <span>Total Tasks</span>
+
+                    <div class="planner-icon">
+                        ▤
+                    </div>
+
+                </div>
+
+                <h2 id="totalTasks">
+                    0
+                </h2>
+
+                <small>
+                    Tasks planned
+                </small>
+
+            </div>
+
+
+            <div class="planner-card">
+
+                <div class="planner-card-heading">
+
+                    <span>Completed</span>
+
+                    <div class="planner-icon completed-icon">
+                        ✓
+                    </div>
+
+                </div>
+
+                <h2 id="completedTasks">
+                    0
+                </h2>
+
+                <small>
+                    Tasks finished
+                </small>
+
+            </div>
+
+
+            <div class="planner-card">
+
+                <div class="planner-card-heading">
+
+                    <span>Pending</span>
+
+                    <div class="planner-icon pending-icon">
+                        ○
+                    </div>
+
+                </div>
+
+                <h2 id="pendingTasks">
+                    0
+                </h2>
+
+                <small>
+                    Tasks remaining
+                </small>
+
+            </div>
+
+
+            <div class="planner-card">
+
+                <div class="planner-card-heading">
+
+                    <span>Progress</span>
+
+                    <div class="planner-icon progress-icon">
+                        %
+                    </div>
+
+                </div>
+
+                <h2 id="progressPercent">
+                    0%
+                </h2>
+
+                <small>
+                    Daily progress
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CONTENT ================= -->
+
+        <section class="planner-content-grid">
+
+
+            <!-- TODAY'S SCHEDULE -->
+
+            <div class="planner-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="panel-label">
+                            TODAY
+                        </p>
+
+                        <h2>Today's Schedule</h2>
+
+                        <p class="panel-description">
+                            Your planned activities for the day.
+                        </p>
+
+                    </div>
+
+                    <span id="scheduleCount">
+                        0 Tasks
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="schedule-list"
+                    id="scheduleList">
+                </div>
+
+            </div>
+
+
+            <!-- QUICK OVERVIEW -->
+
+            <div class="planner-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="panel-label">
+                            OVERVIEW
+                        </p>
+
+                        <h2>Task Progress</h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-section">
+
+                    <div class="progress-circle">
+
+                        <span id="circlePercent">
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h3 id="progressText">
+                            Getting started
+                        </h3>
+
+                        <p>
+                            Complete your tasks to
+                            improve your daily progress.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="priority-section">
+
+                    <h3>Priority Breakdown</h3>
+
+                    <div class="priority-row">
+
+                        <span>
+                            High
+                        </span>
+
+                        <strong id="highCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="priority-row">
+
+                        <span>
+                            Medium
+                        </span>
+
+                        <strong id="mediumCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                    <div class="priority-row">
+
+                        <span>
+                            Low
+                        </span>
+
+                        <strong id="lowCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ALL TASKS ================= -->
+
+        <section class="tasks-panel">
+
+            <div class="tasks-header">
+
+                <div>
+
+                    <p class="panel-label">
+                        YOUR PLANNER
+                    </p>
+
+                    <h2>My Tasks</h2>
+
+                    <p class="panel-description">
+                        Manage your tasks and daily activities.
+                    </p>
+
+                </div>
+
+
+                <select
+                    id="taskFilter"
+                    onchange="renderTasks()">
+
+                    <option value="All">
+                        All Tasks
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="tasks-list"
+                id="tasksList">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= MODAL ================= -->
+
+    <div
+        class="task-modal"
+        id="taskModal">
+
+        <div class="task-modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    Add Task
+                </h2>
+
+                <button
+                    class="close-modal"
+                    onclick="closeTaskModal()">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <form id="taskForm">
+
+                <label>
+                    Task Name
+                </label>
+
+                <input
+                    type="text"
+                    id="taskTitle"
+                    placeholder="Enter task name"
+                    required
+                >
+
+
+                <div class="form-row">
+
+                    <div>
+
+                        <label>
+                            Time
+                        </label>
+
+                        <input
+                            type="time"
+                            id="taskTime"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Priority
+                        </label>
+
+                        <select id="taskPriority">
+
+                            <option value="High">
+                                High
+                            </option>
+
+                            <option value="Medium" selected>
+                                Medium
+                            </option>
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <label>
+                    Category
+                </label>
+
+                <select id="taskCategory">
+
+                    <option value="Study">
+                        Study
+                    </option>
+
+                    <option value="Project">
+                        Project
+                    </option>
+
+                    <option value="Personal">
+                        Personal
+                    </option>
+
+                    <option value="College">
+                        College
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+
+                <label>
+                    Description
+                </label>
+
+                <textarea
+                    id="taskDescription"
+                    placeholder="Add a short description..."
+                ></textarea>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeTaskModal()">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        Save Task
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="planner.js"></script>
+    <script src="theme.js"></script>
+
+</body>
+</html>

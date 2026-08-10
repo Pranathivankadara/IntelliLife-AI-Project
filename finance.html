@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliLife AI - Finance</title>
+
+    <link rel="stylesheet" href="finance.css">
+</head>
+
+<body class="finance-page">
+
+    <!-- SIDEBAR -->
+    <aside class="finance-sidebar">
+
+        <div class="finance-logo">
+            <span>✦</span>
+            IntelliLife <b>AI</b>
+        </div>
+
+        <nav class="finance-nav">
+            <a href="dashboard.html">
+    <span>⌂</span>
+    Dashboard
+</a>
+
+<a href="ai.html">
+    <span>✦</span>
+    AI Assistant
+</a>
+
+<a class="active">
+    <span>₹</span>
+    Finance
+</a>
+
+<a href="notes.html">
+    <span>📝</span>
+    Notes
+</a>
+
+<a href="planner.html">
+    <span>▣</span>
+    Planner
+</a>
+
+<a href="goals.html">
+    <span>◎</span>
+    Goals
+</a>
+
+<a href="settings.html">
+    <span>⚙</span>
+    Settings
+</a>
+            </nav>
+
+        <div class="finance-logout">
+            <button onclick="logout()">
+                ↪ &nbsp; Logout
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="finance-main">
+
+        <!-- HEADER -->
+        <header class="finance-header">
+
+            <div>
+                <p class="finance-label">PERSONAL FINANCE</p>
+
+                <h1>Finance</h1>
+
+                <p class="finance-subtitle">
+                    Understand your money. Plan smarter. Spend better.
+                </p>
+            </div>
+
+            <button
+                class="add-transaction-btn"
+                onclick="openTransactionForm()">
+                + Add Transaction
+            </button>
+
+        </header>
+
+
+        <!-- SUMMARY CARDS -->
+        <section class="finance-summary">
+
+            <div class="finance-card balance-card">
+
+                <div class="card-heading">
+                    <span>Total Balance</span>
+                    <div class="finance-icon">₹</div>
+                </div>
+
+                <h2 id="totalBalance">₹0</h2>
+
+                <small>Your available balance</small>
+
+            </div>
+
+
+            <div class="finance-card income-card">
+
+                <div class="card-heading">
+                    <span>Income</span>
+                    <div class="finance-icon">↗</div>
+                </div>
+
+                <h2 id="totalIncome">₹0</h2>
+
+                <small>Total money received</small>
+
+            </div>
+
+
+            <div class="finance-card expense-card">
+
+                <div class="card-heading">
+                    <span>Expenses</span>
+                    <div class="finance-icon">↘</div>
+                </div>
+
+                <h2 id="totalExpense">₹0</h2>
+
+                <small>Total money spent</small>
+
+            </div>
+
+
+            <div class="finance-card savings-card">
+
+                <div class="card-heading">
+                    <span>Savings</span>
+                    <div class="finance-icon">◎</div>
+                </div>
+
+                <h2 id="totalSavings">₹0</h2>
+
+                <small>Income minus expenses</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- OVERVIEW + CATEGORIES -->
+        <section class="finance-content-grid">
+
+
+            <!-- SPENDING OVERVIEW -->
+            <div class="finance-panel overview-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">MONEY FLOW</p>
+
+                        <h2>Spending Overview</h2>
+
+                        <p class="panel-description">
+                            See where your money is going.
+                        </p>
+                    </div>
+
+                    <select id="periodSelect">
+                        <option value="month">This Month</option>
+                        <option value="week">This Week</option>
+                        <option value="year">This Year</option>
+                    </select>
+
+                </div>
+
+
+                <!-- MINI STATS -->
+                <div class="flow-stats">
+
+                    <div class="flow-stat">
+                        <span>Income</span>
+                        <strong id="overviewIncome">₹0</strong>
+                    </div>
+
+                    <div class="flow-stat">
+                        <span>Spent</span>
+                        <strong id="overviewExpense">₹0</strong>
+                    </div>
+
+                    <div class="flow-stat">
+                        <span>Remaining</span>
+                        <strong id="overviewBalance">₹0</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- VISUAL BAR -->
+                <div class="money-flow">
+
+                    <div class="flow-row">
+
+                        <div class="flow-title">
+                            <span>Income</span>
+                            <span id="incomePercent">0%</span>
+                        </div>
+
+                        <div class="flow-track">
+                            <div
+                                id="incomeBar"
+                                class="flow-fill income-fill">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flow-row">
+
+                        <div class="flow-title">
+                            <span>Expenses</span>
+                            <span id="expensePercent">0%</span>
+                        </div>
+
+                        <div class="flow-track">
+                            <div
+                                id="expenseBar"
+                                class="flow-fill expense-fill">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="money-message" id="moneyMessage">
+                    Add transactions to understand your spending pattern.
+                </div>
+
+            </div>
+
+
+
+            <!-- CATEGORY BREAKDOWN -->
+            <div class="finance-panel category-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <p class="panel-label">BREAKDOWN</p>
+
+                        <h2>Where You Spend</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="category-list">
+
+                    <div class="category-item">
+
+                        <div class="category-left">
+
+                            <span class="category-dot">
+                                F
+                            </span>
+
+                            <div>
+                                <strong>Food</strong>
+                                <small>Daily expenses</small>
+                            </div>
+
+                        </div>
+
+                        <strong id="foodAmount">₹0</strong>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <div class="category-left">
+
+                            <span class="category-dot">
+                                T
+                            </span>
+
+                            <div>
+                                <strong>Travel</strong>
+                                <small>Transport</small>
+                            </div>
+
+                        </div>
+
+                        <strong id="travelAmount">₹0</strong>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <div class="category-left">
+
+                            <span class="category-dot">
+                                S
+                            </span>
+
+                            <div>
+                                <strong>Shopping</strong>
+                                <small>Personal shopping</small>
+                            </div>
+
+                        </div>
+
+                        <strong id="shoppingAmount">₹0</strong>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <div class="category-left">
+
+                            <span class="category-dot">
+                                O
+                            </span>
+
+                            <div>
+                                <strong>Others</strong>
+                                <small>Other expenses</small>
+                            </div>
+
+                        </div>
+
+                        <strong id="othersAmount">₹0</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- RECENT TRANSACTIONS -->
+        <section class="transactions-panel">
+
+            <div class="transactions-header">
+
+                <div>
+                    <p class="panel-label">ACTIVITY</p>
+
+                    <h2>Recent Transactions</h2>
+
+                    <p class="panel-description">
+                        Your latest income and expenses.
+                    </p>
+                </div>
+
+                <button
+                    class="view-all-btn"
+                    onclick="viewAllTransactions()">
+                    View All →
+                </button>
+
+            </div>
+
+
+            <div
+                id="transactionList"
+                class="transaction-list">
+
+                <div class="transaction-empty">
+
+                    <div class="empty-icon">
+                        ₹
+                    </div>
+
+                    <h3>No transactions yet</h3>
+
+                    <p>
+                        Add your first transaction to start tracking your money.
+                    </p>
+
+                    <button
+                        class="outline-btn"
+                        onclick="openTransactionForm()">
+                        + Add Transaction
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ADD TRANSACTION MODAL -->
+    <div
+        id="transactionModal"
+        class="transaction-modal">
+
+        <div class="transaction-modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <p class="panel-label">FINANCE</p>
+
+                    <h2>Add Transaction</h2>
+                </div>
+
+                <button
+                    class="close-modal"
+                    onclick="closeTransactionForm()">
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="transactionForm"
+                onsubmit="addTransaction(event)">
+
+                <label>Transaction Type</label>
+
+                <div class="transaction-type">
+
+                    <label class="type-option">
+
+                        <input
+                            type="radio"
+                            name="transactionType"
+                            value="income"
+                            checked>
+
+                        <span>Income</span>
+
+                    </label>
+
+
+                    <label class="type-option">
+
+                        <input
+                            type="radio"
+                            name="transactionType"
+                            value="expense">
+
+                        <span>Expense</span>
+
+                    </label>
+
+                </div>
+
+
+                <label for="amount">
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Enter amount"
+                    min="1"
+                    required>
+
+
+                <label for="description">
+                    Description
+                </label>
+
+                <input
+                    type="text"
+                    id="description"
+                    placeholder="e.g. Monthly pocket money"
+                    required>
+
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select id="category">
+
+                    <option value="Food">Food</option>
+
+                    <option value="Travel">Travel</option>
+
+                    <option value="Shopping">Shopping</option>
+
+                    <option value="Education">Education</option>
+
+                    <option value="Bills">Bills</option>
+
+                    <option value="Others">Others</option>
+
+                </select>
+
+
+                <label for="transactionDate">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="transactionDate"
+                    required>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeTransactionForm()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+                        Save Transaction
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="finance.js"></script>
+    <script src="theme.js"></script>
+
+</body>
+
+</html>

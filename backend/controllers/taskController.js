@@ -39,7 +39,10 @@ const addTask = async (req, res) => {
 // Update Task
 const updateTask = async (req, res) => {
     try {
-        const task = await Task.findById(req.params.id);
+        const task = await Task.findOne({
+    _id: req.params.id,
+    user: req.user.id
+});
 
         if (!task) {
             return res.status(404).json({
@@ -65,7 +68,10 @@ const updateTask = async (req, res) => {
 // Delete Task
 const deleteTask = async (req, res) => {
     try {
-        const task = await Task.findById(req.params.id);
+      const task = await Task.findOne({
+    _id: req.params.id,
+    user: req.user.id
+});
 
         if (!task) {
             return res.status(404).json({

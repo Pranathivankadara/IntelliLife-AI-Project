@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliLife AI - Settings</title>
+
+    <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="settings-sidebar">
+
+        <div class="settings-logo">
+            <span>✦</span> IntelliLife <b>AI</b>
+        </div>
+
+        <nav class="settings-nav">
+
+            <a href="dashboard.html">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="ai.html">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+            <a href="finance.html">
+                <span>₹</span>
+                Finance
+            </a>
+
+            <a href="notes.html">
+                <span>📝</span>
+                Notes
+            </a>
+
+            <a href="planner.html">
+                <span>▣</span>
+                Planner
+            </a>
+
+            <a href="goals.html">
+                <span>◎</span>
+                Goals
+            </a>
+
+            <a href="settings.html" class="active">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+        <div class="settings-logout">
+            <button onclick="logout()">
+                ↪ &nbsp; Logout
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="settings-main">
+
+        <!-- HEADER -->
+        <header class="settings-header">
+
+            <div>
+                <p class="settings-label">PREFERENCES</p>
+
+                <h1>Settings</h1>
+
+                <p class="settings-subtitle">
+                    Manage your account and personalize your IntelliLife experience.
+                </p>
+            </div>
+
+        </header>
+
+
+        <!-- SETTINGS LAYOUT -->
+        <section class="settings-layout">
+
+
+            <!-- LEFT SETTINGS MENU -->
+            <div class="settings-menu">
+
+                <button class="menu-item active" onclick="showSection('profile', this)">
+                    <span>👤</span>
+
+                    <div>
+                        <strong>Profile</strong>
+                        <small>Personal information</small>
+                    </div>
+                </button>
+
+
+                <button class="menu-item" onclick="showSection('notifications', this)">
+                    <span>🔔</span>
+
+                    <div>
+                        <strong>Notifications</strong>
+                        <small>Manage alerts</small>
+                    </div>
+                </button>
+
+
+                <button class="menu-item" onclick="showSection('appearance', this)">
+                    <span>🎨</span>
+
+                    <div>
+                        <strong>Appearance</strong>
+                        <small>Customize your interface</small>
+                    </div>
+                </button>
+
+
+                <button class="menu-item" onclick="showSection('security', this)">
+                    <span>🔒</span>
+
+                    <div>
+                        <strong>Security</strong>
+                        <small>Password and privacy</small>
+                    </div>
+                </button>
+
+
+                <button class="menu-item" onclick="showSection('preferences', this)">
+                    <span>⚙</span>
+
+                    <div>
+                        <strong>Preferences</strong>
+                        <small>General settings</small>
+                    </div>
+                </button>
+
+            </div>
+
+
+            <!-- SETTINGS CONTENT -->
+            <div class="settings-content">
+
+
+                <!-- PROFILE -->
+                <div class="settings-section active-section" id="profile">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="section-label">ACCOUNT</p>
+                            <h2>Profile Information</h2>
+                            <p>Update your personal information.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="profile-box">
+
+                        <div class="profile-avatar">
+                            P
+                        </div>
+
+                        <div>
+                            <h3>Pranathi</h3>
+                            <p>IntelliLife AI User</p>
+                        </div>
+
+                        <button class="change-photo" onclick="changePhoto()">
+    Change Photo
+</button>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                value="Pranathi"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="your@email.com"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input
+                                type="text"
+                                id="phone"
+                                placeholder="+91 XXXXX XXXXX"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Occupation</label>
+
+                            <select id="occupation">
+
+                                <option>Student</option>
+                                <option>Professional</option>
+                                <option>Entrepreneur</option>
+                                <option>Other</option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+
+                    <div class="save-area">
+
+                        <button class="save-btn" onclick="saveProfile()">
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+                <div class="settings-section" id="notifications">
+
+                    <div class="section-header">
+                        <p class="section-label">ALERTS</p>
+
+                        <h2>Notifications</h2>
+
+                        <p>
+                            Choose what notifications you want to receive.
+                        </p>
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Task Reminders</strong>
+
+                            <p>
+                                Get reminders about upcoming tasks.
+                            </p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span></span>
+                        </label>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Goal Updates</strong>
+
+                            <p>
+                                Receive updates about your goals.
+                            </p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span></span>
+                        </label>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Finance Alerts</strong>
+
+                            <p>
+                                Get notified about your spending activity.
+                            </p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span></span>
+                        </label>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+                            <strong>Campus Updates</strong>
+
+                            <p>
+                                Receive important campus notifications.
+                            </p>
+                        </div>
+
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span></span>
+                        </label>
+
+                    </div>
+
+                </div>
+                <div class="save-area">
+    <button class="save-btn" onclick="saveNotifications()">
+        Save Notification Settings
+    </button>
+</div>
+
+
+                <!-- APPEARANCE -->
+                <div class="settings-section" id="appearance">
+
+                    <div class="section-header">
+
+                        <p class="section-label">INTERFACE</p>
+
+                        <h2>Appearance</h2>
+
+                        <p>
+                            Customize how IntelliLife AI looks.
+                        </p>
+
+                    </div>
+
+
+                    <div class="appearance-options">
+
+                        <div class="theme-card selected" onclick="selectTheme(this)">
+
+                            <div class="theme-preview light-preview">
+
+                                <div></div>
+                                <div></div>
+                                <div></div>
+
+                            </div>
+
+                            <strong>Light</strong>
+
+                            <small>Clean and bright</small>
+
+                        </div>
+
+
+                        <div class="theme-card" onclick="selectTheme(this)">
+
+                            <div class="theme-preview dark-preview">
+
+                                <div></div>
+                                <div></div>
+                                <div></div>
+
+                            </div>
+
+                            <strong>Dark</strong>
+
+                            <small>Easy on the eyes</small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SECURITY -->
+                <div class="settings-section" id="security">
+
+                    <div class="section-header">
+
+                        <p class="section-label">PROTECTION</p>
+
+                        <h2>Security & Privacy</h2>
+
+                        <p>
+                            Manage your account security.
+                        </p>
+
+                    </div>
+
+
+                    <div class="security-card">
+
+                        <div>
+                            <strong>Password</strong>
+
+                            <p>
+                                Change your account password.
+                            </p>
+                        </div>
+
+                   <button class="outline-btn" onclick="changePassword()">
+                       Change Password
+                   </button>
+
+                    </div>
+
+
+                    <div class="security-card">
+
+                        <div>
+                            <strong>Login Sessions</strong>
+
+                            <p>
+                                Manage devices where you are logged in.
+                            </p>
+                        </div>
+
+                    <button class="outline-btn" onclick="viewSessions()">
+                       View Sessions
+                    </button>
+
+                    </div>
+
+
+                    <div class="security-card danger-card">
+
+                        <div>
+                            <strong>Delete Account</strong>
+
+                            <p>
+                                Permanently delete your IntelliLife account.
+                            </p>
+                        </div>
+
+                        <button class="danger-btn" onclick="deleteAccount()">
+                            Delete Account
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PREFERENCES -->
+                <div class="settings-section" id="preferences">
+
+                    <div class="section-header">
+
+                        <p class="section-label">GENERAL</p>
+
+                        <h2>General Preferences</h2>
+
+                        <p>
+                            Customize your IntelliLife preferences.
+                        </p>
+
+                    </div>
+
+
+                    <div class="preference-group">
+
+                        <label>Language</label>
+
+                        <select>
+                            <option>English</option>
+                            <option>Telugu</option>
+                            <option>Hindi</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="preference-group">
+
+                        <label>Currency</label>
+
+                        <select>
+                            <option>₹ Indian Rupee (INR)</option>
+                            <option>$ US Dollar (USD)</option>
+                            <option>€ Euro (EUR)</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="preference-group">
+
+                        <label>Start Page</label>
+
+                        <select>
+                            <option>Dashboard</option>
+                            <option>Home</option>
+                            <option>AI Assistant</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="save-area">
+
+                        <button class="save-btn" onclick="savePreferences()">
+                            Save Preferences
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="settings.js"></script>
+    <script src="theme.js"></script>
+
+</body>
+</html>

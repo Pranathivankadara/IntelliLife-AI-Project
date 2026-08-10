@@ -1,38 +1,297 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>AI Assistant</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliLife AI - AI Assistant</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body>
 
-<script src="auth.js"></script>
-<script>checkLogin();</script>
+<body class="ai-page">
 
-<div class="dashboard">
 
-    <aside class="sidebar">
-        <h2>✦ Intelli AI</h2>
+    <!-- ================= SIDEBAR ================= -->
 
-        <a onclick="go('dashboard.html')">🏠 Dashboard</a>
-        <a class="active">🤖 AI Assistant</a>
-        <a onclick="go('finance.html')">💰 Finance</a>
-        <a onclick="go('planner.html')">📅 Planner</a>
-        <a onclick="go('goals.html')">🎯 Goals</a>
-        <a onclick="go('settings.html')">⚙️ Settings</a>
+    <aside class="ai-sidebar">
 
-        <button onclick="logout()">Logout</button>
+        <div class="ai-logo">
+            <span>✦</span>
+            IntelliLife <b>AI</b>
+        </div>
+
+
+        <nav class="ai-nav">
+
+            <a onclick="go('dashboard.html')">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+
+            <a class="active">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+
+            <a onclick="go('finance.html')">
+                <span>₹</span>
+                Finance
+            </a>
+            <a onclick="go('notes.html')">
+                <span>📝</span>
+                Notes
+            </a>
+
+            <a onclick="go('planner.html')">
+                <span>▣</span>
+                Planner
+            </a>
+
+
+            <a onclick="go('goals.html')">
+                <span>◎</span>
+                Goals
+            </a>
+
+
+            <a onclick="go('settings.html')">
+                <span>⚙</span>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="ai-logout">
+
+            <button onclick="logout()">
+                ↪ &nbsp; Logout
+            </button>
+
+        </div>
+
     </aside>
 
-    <main class="main-dashboard">
-        <h2>AI Assistant</h2>
-        <p>This is AI page 🤖</p>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="ai-main">
+
+
+        <!-- HEADER -->
+
+        <header class="ai-header">
+
+            <div>
+
+                <p class="ai-label">
+                    INTELLILIFE AI
+                </p>
+
+                <h1>
+                    AI Assistant
+                </h1>
+
+                <p class="ai-subtitle">
+                    Your intelligent companion for everyday tasks.
+                </p>
+
+            </div>
+
+
+            <div class="ai-header-icon">
+                ✦
+            </div>
+
+        </header>
+
+
+
+        <!-- ================= CHAT AREA ================= -->
+
+        <section class="ai-chat-container">
+
+
+            <!-- CHAT HEADER -->
+
+            <div class="ai-chat-header">
+
+                <div class="ai-bot-avatar">
+                    ✦
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        IntelliLife Assistant
+                    </h3>
+
+                    <p>
+                        ● Online
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MESSAGES -->
+
+            <div
+                id="chatBox"
+                class="ai-chat-box"
+            >
+
+                <div class="ai-welcome">
+
+                    <div class="welcome-icon">
+                        ✦
+                    </div>
+
+                    <h2>
+                        How can I help you?
+                    </h2>
+
+                    <p>
+                        Ask me about your tasks, goals,
+                        studies, planning or anything else.
+                    </p>
+
+
+                    <!-- SUGGESTIONS -->
+
+                    <div class="ai-suggestions">
+
+                        <button onclick="useSuggestion('Help me plan my day')">
+                            📅 Plan my day
+                        </button>
+
+                        <button onclick="useSuggestion('Help me manage my tasks')">
+                            ✓ Manage my tasks
+                        </button>
+
+                        <button onclick="useSuggestion('Give me a study plan')">
+                            📚 Study plan
+                        </button>
+
+                        <button onclick="useSuggestion('Help me set a goal')">
+                            🎯 Set a goal
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- INPUT -->
+
+            <div class="ai-input-container">
+
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Ask IntelliLife AI anything..."
+                    autocomplete="off"
+                    onkeydown="handleAIKey(event)"
+                >
+
+
+                <button
+                    onclick="sendMessage()"
+                    class="ai-send-btn"
+                >
+                    Send
+                    <span>→</span>
+                </button>
+
+            </div>
+
+
+            <p class="ai-note">
+                IntelliLife AI can make mistakes. Check important information.
+            </p>
+
+        </section>
+
+
+
+        <!-- ================= QUICK IDEAS ================= -->
+
+        <section class="ai-ideas">
+
+            <p class="ai-label">
+                TRY ASKING
+            </p>
+
+            <div class="idea-grid">
+
+                <button onclick="useSuggestion('What should I focus on today?')">
+                    <span>◎</span>
+                    What should I focus on today?
+                </button>
+
+                <button onclick="useSuggestion('Help me organize my week')">
+                    <span>▣</span>
+                    Help me organize my week
+                </button>
+
+                <button onclick="useSuggestion('How can I improve my productivity?')">
+                    <span>↗</span>
+                    Improve my productivity
+                </button>
+
+            </div>
+
+        </section>
+
+
     </main>
 
-</div>
 
-<script src="script.js"></script>
+
+    <script>
+
+        function handleAIKey(event) {
+
+            if (event.key === "Enter") {
+
+                sendMessage();
+
+            }
+
+        }
+
+
+        function useSuggestion(text) {
+
+            const input =
+                document.getElementById("userInput");
+
+            input.value = text;
+
+            input.focus();
+
+        }
+
+    </script>
+
+
+    <script src="dashboard.js"></script>
 
 </body>
+
 </html>

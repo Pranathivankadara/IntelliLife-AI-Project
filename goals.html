@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliLife AI - Goals</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Matching Dashboard CSS -->
+  <link rel="stylesheet" href="goals.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar (Matches Dashboard Screenshot) -->
+    <aside class="sidebar">
+      <<div class="brand">
+    <span class="brand-icon">✧</span>
+    <span class="brand-name">IntelliLife <strong>AI</strong></span>
+</div>
+
+      <nav class="nav-menu">
+
+    <a href="dashboard.html" class="nav-item">
+        <span>⌂</span>
+        Dashboard
+    </a>
+
+    <a href="ai.html" class="nav-item">
+        <span>✧</span>
+        AI Assistant
+    </a>
+
+    <a href="finance.html" class="nav-item">
+        <span>₹</span>
+        Finance
+    </a>
+
+    <a href="notes.html" class="nav-item">
+        <span>▤</span>
+        Notes
+    </a>
+
+    <a href="planner.html" class="nav-item">
+        <span>□</span>
+        Planner
+    </a>
+
+    <a href="goals.html" class="nav-item active">
+        <span>◎</span>
+        Goals
+    </a>
+
+    <a href="settings.html" class="nav-item">
+        <span>⚙</span>
+        Settings
+    </a>
+
+</nav>
+
+<div class="sidebar-footer">
+
+    <a href="login.html" class="nav-item">
+        <span>↪</span>
+        Logout
+    </a>
+
+</div>
+      <div class="sidebar-footer">
+        <a href="login.html" class="nav-item"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <header class="top-bar">
+        <div class="header-titles">
+          <span class="sub-heading">PERSONAL DASHBOARD</span>
+          <h1>Your Active <span>Goals</span> 🎯</h1>
+          <p class="subtitle">Track your progress and complete your milestones.</p>
+        </div>
+        <div class="user-profile">
+          <div class="avatar">U</div>
+        </div>
+      </header>
+
+      <!-- Section Header & Add Goal Button -->
+      <div class="content-body">
+        <div class="section-header">
+          <h2>Overview & Tasks</h2>
+          <button class="btn btn-primary" id="openGoalModalBtn">
+            <i class="fa-solid fa-plus"></i> Add Goal
+          </button>
+        </div>
+
+        <!-- Goals Cards Grid -->
+        <div class="goals-grid" id="goalsContainer"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Goal Modal -->
+  <div class="modal-overlay" id="goalModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add New Goal</h3>
+        <button class="close-btn" id="closeGoalModalBtn">&times;</button>
+      </div>
+      <form id="addGoalForm">
+        <div class="form-group">
+          <label for="goalTitle">Goal Title</label>
+          <input type="text" id="goalTitle" required placeholder="e.g., Master Python" />
+        </div>
+        <div class="form-group">
+          <label for="goalDeadline">Deadline</label>
+          <input type="date" id="goalDeadline" required />
+        </div>
+        <div class="form-group">
+          <label>Subtasks</label>
+          <div id="subtasksContainer">
+            <input type="text" class="subtask-input" placeholder="Subtask 1" />
+            <input type="text" class="subtask-input" placeholder="Subtask 2" />
+          </div>
+          <button type="button" class="btn btn-secondary" id="addSubtaskInputBtn">+ Add Subtask</button>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="goals.js"></script>
+  <script src="theme.js"></script>
+</body>
+</html>

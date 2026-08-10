@@ -1,32 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login - IntelliLife AI</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="center">
+<body class="simple-login-page">
 
-<div class="login-box">
+    <div class="simple-login-box">
 
-    <h2>Login</h2>
+        <!-- Logo -->
 
-    <input type="email" id="email" placeholder="Enter Email" required>
+        <a href="index.html" class="simple-login-logo">
+            IntelliLife <span>AI</span>
+        </a>
 
-    <input type="password" id="password" placeholder="Enter Password" required>
 
-    <button onclick="loginUser()" class="primary-btn">
-        Login
-    </button>
+        <!-- Heading -->
 
-    <p id="message"></p>
+        <div class="simple-login-heading">
 
-</div>
+            <h1>Welcome back</h1>
 
-<script src="auth.js"></script>
+            <p>
+                Login to continue to IntelliLife AI
+            </p>
+
+        </div>
+
+
+        <!-- Login Form -->
+
+        <div class="simple-login-form">
+
+            <label for="email">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button
+                type="button"
+                onclick="loginUser()"
+                class="simple-login-btn"
+            >
+                Login
+                <span>→</span>
+            </button>
+
+        </div>
+
+
+        <!-- Message -->
+
+        <p id="message" class="simple-login-message"></p>
+
+
+        <!-- Register -->
+
+        <p class="simple-register-text">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Create an account
+            </a>
+
+        </p>
+
+
+        <!-- Back -->
+
+        <a href="index.html" class="simple-back-home">
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+    <script src="auth.js"></script>
+    <script src="theme.js"></script>
 
 </body>
-</html>
 
+</html>
