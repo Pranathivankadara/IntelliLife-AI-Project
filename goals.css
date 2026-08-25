@@ -39,9 +39,17 @@
 }
 
 body {
+    margin: 0;
     background: var(--bg);
     color: var(--text-main);
     min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
 }
 
 /* =========================================
@@ -55,6 +63,7 @@ body {
 
 /* =========================================
    SIDEBAR
+   SAME AS NOTES
 ========================================= */
 
 .sidebar {
@@ -75,7 +84,9 @@ body {
     z-index: 100;
 }
 
-/* LOGO */
+/* =========================================
+   LOGO
+========================================= */
 
 .brand {
     display: flex;
@@ -134,12 +145,20 @@ body {
     transition: 0.2s ease;
 }
 
-.nav-item i {
+.nav-item i,
+.nav-item > span {
     width: 20px;
+    min-width: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     text-align: center;
 
     font-size: 15px;
+
+    color: inherit;
 }
 
 .nav-item:hover {
@@ -155,22 +174,63 @@ body {
 }
 
 /* =========================================
-   SIDEBAR FOOTER
+   LOGOUT
+   SAME AS NOTES
 ========================================= */
 
 .sidebar-footer {
     margin-top: auto;
 
-    padding-top: 12px;
+    padding: 0 0 28px 14px;
 }
 
 .sidebar-footer .nav-item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    width: fit-content;
+
+    height: auto;
+
+    padding: 8px 10px;
+
     color: var(--sidebar-text);
+
+    background: transparent;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .sidebar-footer .nav-item:hover {
     background: var(--sidebar-hover);
     color: #ffffff;
+
+    text-decoration: none;
+}
+
+.sidebar-footer .nav-item i,
+.sidebar-footer .nav-item > span {
+    width: 20px;
+    min-width: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: inherit;
+
+    font-size: 15px;
 }
 
 /* =========================================
@@ -705,7 +765,7 @@ body {
 
     padding: 0 12px;
 
-    border: 1px solid #ddddE5;
+    border: 1px solid #dddde5;
 
     border-radius: 7px;
 
@@ -784,62 +844,83 @@ body {
     }
 
     .nav-item {
-    height: 44px;
-    padding: 0 14px;
+        height: 44px;
 
-    display: flex;
-    align-items: center;
+        padding: 0 14px;
 
-    gap: 13px;
+        display: flex;
+        align-items: center;
 
-    color: #aeb0c0;
-    text-decoration: none;
+        gap: 13px;
 
-    font-size: 13px;
-    font-weight: 500;
+        color: #aeb0c0;
 
-    border-radius: 8px;
+        text-decoration: none;
 
-    transition: 0.2s ease;
-}
+        font-size: 13px;
+        font-weight: 500;
 
-.nav-item > span {
-    width: 20px;
-    min-width: 20px;
+        border-radius: 8px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+        transition: 0.2s ease;
+    }
 
-    font-size: 15px;
-    color: #aeb0c0;
-}
+    .nav-item > span,
+    .nav-item i {
+        width: 20px;
+        min-width: 20px;
 
-.nav-item:hover {
-    background: #22253b;
-    color: white;
-}
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-.nav-item:hover > span {
-    color: white;
-}
+        font-size: 15px;
 
-.nav-item.active {
-    background: #2b2946;
-    color: white;
-}
+        color: #aeb0c0;
+    }
 
-.nav-item.active > span {
-    color: white;
-}
+    .nav-item:hover {
+        background: #22253b;
+        color: white;
+    }
 
-.sidebar-footer {
-    margin-top: auto;
-}
+    .nav-item:hover > span,
+    .nav-item:hover i {
+        color: white;
+    }
+
+    .nav-item.active {
+        background: #2b2946;
+        color: white;
+
+        border-left: 3px solid #9b8ceb;
+    }
+
+    .nav-item.active > span,
+    .nav-item.active i {
+        color: white;
+    }
+
+    /* LOGOUT - SAME AS NOTES */
+
     .sidebar-footer {
         margin-top: 12px;
 
-        border-top: none;
+        padding: 0 0 28px 14px;
+    }
+
+    .sidebar-footer .nav-item {
+        width: fit-content;
+
+        height: auto;
+
+        padding: 8px 10px;
+
+        gap: 12px;
+
+        font-size: 13px;
+
+        font-weight: 400;
     }
 
     .main-content {

@@ -1,4 +1,4 @@
-let goalsData = [
+ let goalsData = JSON.parse(localStorage.getItem("intelliLifeGoals")) || [
   {
     id: 1,
     title: "Learn Python",
@@ -106,13 +106,25 @@ function toggleSubtask(goalId, subtaskId) {
     const subtask = goal.subtasks.find((st) => st.id === subtaskId);
     if (subtask) {
       subtask.completed = !subtask.completed;
-      renderGoals();
+
+localStorage.setItem(
+  "intelliLifeGoals",
+  JSON.stringify(goalsData)
+);
+
+renderGoals();
     }
   }
 }
 
 function deleteGoal(goalId) {
   goalsData = goalsData.filter((g) => g.id !== goalId);
+
+  localStorage.setItem(
+    "intelliLifeGoals",
+    JSON.stringify(goalsData)
+  );
+
   renderGoals();
 }
 
@@ -122,7 +134,13 @@ function editGoal(goalId) {
     const newTitle = prompt("Edit Goal Title:", goal.title);
     if (newTitle && newTitle.trim() !== "") {
       goal.title = newTitle.trim();
-      renderGoals();
+
+localStorage.setItem(
+  "intelliLifeGoals",
+  JSON.stringify(goalsData)
+);
+
+renderGoals();
     }
   }
 }
@@ -183,8 +201,14 @@ addGoalForm.addEventListener("submit", (e) => {
   };
 
   goalsData.push(newGoal);
-  renderGoals();
-  closeModal();
+
+localStorage.setItem(
+  "intelliLifeGoals",
+  JSON.stringify(goalsData)
+);
+
+renderGoals();
+closeModal();
 });
 
 openModalBtn.addEventListener("click", openModal);

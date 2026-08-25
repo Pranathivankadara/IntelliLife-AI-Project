@@ -3,14 +3,40 @@
 ========================================= */
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+}
+
+:root {
+    --sidebar-bg: #171a2b;
+    --sidebar-text: #aeb0c0;
+    --sidebar-hover: #22253b;
+    --sidebar-active: #2b2946;
+
+    --bg: #f7f7fb;
+    --card: #ffffff;
+
+    --text-main: #252637;
+    --text-secondary: #858797;
+    --text-muted: #999aa7;
+
+    --purple: #6957d8;
+    --purple-dark: #5846c5;
+    --purple-light: #f0eef9;
+
+    --border: #e4e4ea;
+    --light-border: #f0f0f3;
+
+    --radius: 11px;
 }
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f7f7fb;
-    color: #202133;
+    background: var(--bg);
+    color: var(--text-main);
+    min-height: 100vh;
 }
 
 button,
@@ -21,7 +47,18 @@ select {
 
 
 /* =========================================
+   APP CONTAINER
+========================================= */
+
+.finance-app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =========================================
    SIDEBAR
+   SAME SPACING AS GOALS
 ========================================= */
 
 .finance-sidebar {
@@ -34,7 +71,7 @@ select {
 
     padding: 28px 17px;
 
-    background: #171a2b;
+    background: var(--sidebar-bg);
 
     display: flex;
     flex-direction: column;
@@ -43,9 +80,17 @@ select {
 }
 
 
-/* LOGO */
+/* =========================================
+   LOGO
+   SAME SPACING AS GOALS
+========================================= */
 
 .finance-logo {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
     padding: 5px 14px 38px;
 
     color: #ffffff;
@@ -55,8 +100,8 @@ select {
 }
 
 .finance-logo span {
-    color: #a99bea;
-    margin-right: 5px;
+    color: #9b8ceb;
+    font-size: 18px;
 }
 
 .finance-logo b {
@@ -64,7 +109,10 @@ select {
 }
 
 
-/* NAVIGATION */
+/* =========================================
+   NAVIGATION
+   SAME SPACING AS GOALS
+========================================= */
 
 .finance-nav {
     display: flex;
@@ -72,7 +120,9 @@ select {
     gap: 6px;
 }
 
-.finance-nav a {
+.finance-nav a,
+.finance-nav a:visited {
+    width: 100%;
     height: 44px;
 
     padding: 0 14px;
@@ -82,9 +132,12 @@ select {
 
     gap: 13px;
 
-    color: #aeb0c0;
+    color: var(--sidebar-text);
 
     font-size: 13px;
+    font-weight: 500;
+
+    text-decoration: none !important;
 
     border-radius: 8px;
 
@@ -95,67 +148,99 @@ select {
 
 .finance-nav a span {
     width: 20px;
+    min-width: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     text-align: center;
 
     font-size: 15px;
+
+    color: inherit;
 }
 
 .finance-nav a:hover {
-    background: #22253b;
-    color: white;
+    background: var(--sidebar-hover);
+    color: #ffffff;
 }
 
-.finance-nav a.active {
-    background: #2b2946;
-    color: white;
+.finance-nav a.active,
+.finance-nav a.active:visited,
+.finance-nav a.active:hover {
+    background: var(--sidebar-active);
+
+    color: #ffffff;
 
     border-left: 3px solid #9b8ceb;
+
+    text-decoration: none !important;
 }
 
 
-/* LOGOUT */
+/* =========================================
+   LOGOUT
+   SAME SPACING AS GOALS
+========================================= */
 
 .finance-logout {
     margin-top: auto;
+
+    padding: 0 0 28px 14px;
 }
 
 .finance-logout button {
-    width: 100%;
+    display: flex;
+    align-items: center;
 
-    padding: 12px 14px;
+    gap: 12px;
+
+    width: fit-content;
+
+    height: auto;
+
+    padding: 8px 10px;
 
     border: none;
 
     background: transparent;
 
-    color: #aeb0c0;
+    color: var(--sidebar-text);
 
     text-align: left;
 
     border-radius: 8px;
 
     font-size: 13px;
+    font-weight: 400;
 
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .finance-logout button:hover {
-    background: #22253b;
-    color: white;
+    background: var(--sidebar-hover);
+    color: #ffffff;
 }
 
 
 /* =========================================
    MAIN
+   SAME SPACING AS GOALS
 ========================================= */
 
 .finance-main {
     margin-left: 240px;
 
+    flex: 1;
+
     min-height: 100vh;
 
     padding: 42px 5% 55px;
+
+    overflow-y: auto;
 }
 
 
@@ -190,6 +275,8 @@ select {
 
     font-size: 30px;
 
+    font-weight: 700;
+
     letter-spacing: -0.5px;
 }
 
@@ -202,7 +289,9 @@ select {
 }
 
 
-/* ADD BUTTON */
+/* =========================================
+   ADD BUTTON
+========================================= */
 
 .add-transaction-btn {
     padding: 12px 18px;
@@ -291,7 +380,9 @@ select {
 }
 
 
-/* ICON */
+/* =========================================
+   FINANCE ICON
+========================================= */
 
 .finance-icon {
     width: 37px;
@@ -373,6 +464,8 @@ select {
     color: #282a3b;
 
     font-size: 18px;
+
+    font-weight: 700;
 }
 
 .panel-description {
@@ -384,7 +477,9 @@ select {
 }
 
 
-/* PERIOD SELECT */
+/* =========================================
+   PERIOD SELECT
+========================================= */
 
 .panel-header select {
     min-width: 105px;
@@ -449,7 +544,9 @@ select {
 }
 
 
-/* MONEY FLOW */
+/* =========================================
+   MONEY FLOW
+========================================= */
 
 .money-flow {
     display: flex;
@@ -494,8 +591,7 @@ select {
 
     border-radius: 20px;
 
-    transition:
-        width 0.5s ease;
+    transition: width 0.5s ease;
 }
 
 .income-fill {
@@ -507,7 +603,9 @@ select {
 }
 
 
-/* MESSAGE */
+/* =========================================
+   MESSAGE
+========================================= */
 
 .money-message {
     margin-top: 24px;
@@ -581,7 +679,9 @@ select {
 }
 
 
-/* CATEGORY ICON */
+/* =========================================
+   CATEGORY ICON
+========================================= */
 
 .category-dot {
     width: 31px;
@@ -652,7 +752,9 @@ select {
 }
 
 
-/* EMPTY STATE */
+/* =========================================
+   EMPTY STATE
+========================================= */
 
 .transaction-empty {
     min-height: 165px;
@@ -706,7 +808,9 @@ select {
 }
 
 
-/* ADD BUTTON IN EMPTY STATE */
+/* =========================================
+   ADD BUTTON IN EMPTY STATE
+========================================= */
 
 .outline-btn {
     margin-top: 14px;
@@ -888,7 +992,9 @@ select {
 }
 
 
-/* MODAL HEADER */
+/* =========================================
+   MODAL HEADER
+========================================= */
 
 .modal-header {
     display: flex;
@@ -930,7 +1036,9 @@ select {
 }
 
 
-/* FORM */
+/* =========================================
+   FORM
+========================================= */
 
 #transactionForm {
     display: flex;
@@ -980,7 +1088,9 @@ select {
 }
 
 
-/* TYPE */
+/* =========================================
+   TYPE
+========================================= */
 
 .transaction-type {
     display: grid;
@@ -1029,7 +1139,9 @@ select {
 }
 
 
-/* MODAL ACTIONS */
+/* =========================================
+   MODAL ACTIONS
+========================================= */
 
 .modal-actions {
     display: flex;
@@ -1116,20 +1228,20 @@ select {
         flex-direction: row;
 
         flex-wrap: wrap;
-        text-decoration: none;
     }
 
     .finance-nav a {
         flex: 1;
 
         min-width: 100px;
-        text-decoration: none;
 
         justify-content: center;
     }
 
     .finance-logout {
         margin-top: 12px;
+
+        padding: 0 0 28px 14px;
     }
 
     .finance-logout button {
@@ -1185,6 +1297,8 @@ select {
         padding: 20px;
     }
 }
+
+
 /* =========================================
    SIDEBAR LINKS - NORMAL TEXT
 ========================================= */
@@ -1194,17 +1308,10 @@ select {
 .finance-nav a:hover,
 .finance-nav a:active {
     text-decoration: none !important;
-    color: #aeb0c0;
-}
-
-.finance-nav a:hover {
-    background: #22253b;
-    color: #ffffff;
 }
 
 .finance-nav a.active,
 .finance-nav a.active:visited,
 .finance-nav a.active:hover {
     text-decoration: none !important;
-    color: #ffffff;
 }

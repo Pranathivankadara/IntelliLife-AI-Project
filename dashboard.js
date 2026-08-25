@@ -2,7 +2,13 @@
 // DASHBOARD.JS
 // ==========================================
 
+
+// ==========================================
+// AUTH TOKEN
+// ==========================================
+
 const token = localStorage.getItem("token");
+
 
 // ==========================================
 // PROTECT DASHBOARD
@@ -29,6 +35,7 @@ if (savedUser) {
             document.getElementById("userName");
 
         if (userName) {
+
             userName.innerText =
                 user.name ||
                 user.username ||
@@ -36,7 +43,11 @@ if (savedUser) {
         }
 
     } catch (error) {
-        console.error("User data error:", error);
+
+        console.error(
+            "User data error:",
+            error
+        );
     }
 }
 
@@ -52,9 +63,11 @@ async function addTask() {
 
     if (!input) return;
 
-    const task = input.value.trim();
+    const task =
+        input.value.trim();
 
     if (task === "") {
+
         alert("Please enter a task");
         return;
     }
@@ -63,6 +76,7 @@ async function addTask() {
         localStorage.getItem("token");
 
     if (!token) {
+
         alert("Please login first");
         return;
     }
@@ -75,6 +89,7 @@ async function addTask() {
                 "http://localhost:5000/api/tasks",
                 {
                     method: "GET",
+
                     headers: {
                         "Authorization":
                             "Bearer " + token
@@ -102,9 +117,11 @@ async function addTask() {
             );
 
         if (duplicate) {
+
             alert(
                 "This task already exists! ⚠️"
             );
+
             return;
         }
 
@@ -133,13 +150,17 @@ async function addTask() {
         const data =
             await response.json();
 
+
         if (!response.ok) {
+
             alert(
                 data.message ||
                 "Failed to add task"
             );
+
             return;
         }
+
 
         alert(
             "Task added successfully! ✅"
@@ -154,7 +175,6 @@ async function addTask() {
         console.error(error);
 
         alert("Server error");
-
     }
 }
 
@@ -169,12 +189,30 @@ async function loadTasks() {
         localStorage.getItem("token");
 
     if (!token) {
+
         window.location.href =
             "login.html";
+
         return;
     }
 
+
     try {
+
+        /*
+        ==========================================
+        NOTE
+
+        Dashboard Task Cards are now controlled
+        by Planner data.
+
+        Planner = Task Manager for Dashboard.
+
+        MongoDB tasks are still loaded here for
+        the Task Manager section itself.
+        ==========================================
+        */
+
 
         const response =
             await fetch(
@@ -189,73 +227,23 @@ async function loadTasks() {
                 }
             );
 
+
         const data =
             await response.json();
 
+
         if (!response.ok) {
+
             console.error(data);
+
             return;
         }
+
 
         const tasks =
             Array.isArray(data)
                 ? data
                 : data.tasks || [];
-
-
-        // ==================================
-        // TOTAL
-        // ==================================
-
-        const totalTasks =
-            document.getElementById(
-                "totalTasks"
-            );
-
-        if (totalTasks) {
-            totalTasks.innerText =
-                tasks.length;
-        }
-
-
-        // ==================================
-        // COMPLETED
-        // ==================================
-
-        const completedTasks =
-            document.getElementById(
-                "completedTasks"
-            );
-
-        const completed =
-            tasks.filter(
-                task => task.done === true
-            ).length;
-
-        if (completedTasks) {
-            completedTasks.innerText =
-                completed;
-        }
-
-
-        // ==================================
-        // PENDING
-        // ==================================
-
-        const pendingTasks =
-            document.getElementById(
-                "pendingTasks"
-            );
-
-        const pending =
-            tasks.filter(
-                task => task.done !== true
-            ).length;
-
-        if (pendingTasks) {
-            pendingTasks.innerText =
-                pending;
-        }
 
 
         // ==================================
@@ -267,14 +255,17 @@ async function loadTasks() {
                 "taskList"
             );
 
+
         if (taskList) {
 
             taskList.innerHTML = "";
+
 
             tasks.forEach(task => {
 
                 const div =
                     document.createElement("div");
+
 
                 div.innerHTML = `
 
@@ -354,6 +345,7 @@ async function loadTasks() {
 
                 `;
 
+
                 taskList.appendChild(div);
 
             });
@@ -363,13 +355,120 @@ async function loadTasks() {
             handleTaskSearch();
         }
 
+
+        /*
+        ==========================================
+        IMPORTANT
+
+        Do NOT use MongoDB task count here.
+
+        Dashboard Tasks / Completed / Pending
+        cards are based on Planner module.
+        ==========================================
+        */
+
+        updateTaskCardsFromPlanner();
+
+
     } catch (error) {
 
         console.error(
             "Error loading tasks:",
             error
         );
+    }
+}
 
+
+// ==========================================
+// UPDATE TASK CARDS FROM PLANNER
+// ==========================================
+
+function updateTaskCardsFromPlanner() {
+
+    const plannerData =
+        JSON.parse(
+            localStorage.getItem(
+                "intelliLifePlanner"
+            )
+        ) || [];
+
+
+    // ==========================================
+    // TOTAL PLANNER TASKS
+    // ==========================================
+
+    const total =
+        plannerData.length;
+
+
+    // ==========================================
+    // COMPLETED PLANNER TASKS
+    // ==========================================
+
+    const completed =
+        plannerData.filter(
+            task =>
+                task.completed === true
+        ).length;
+
+
+    // ==========================================
+    // PENDING PLANNER TASKS
+    // ==========================================
+
+    const pending =
+        plannerData.filter(
+            task =>
+                task.completed !== true
+        ).length;
+
+
+    // ==========================================
+    // TOTAL TASKS CARD
+    // ==========================================
+
+    const totalTasks =
+        document.getElementById(
+            "totalTasks"
+        );
+
+    if (totalTasks) {
+
+        totalTasks.textContent =
+            total;
+    }
+
+
+    // ==========================================
+    // COMPLETED TASKS CARD
+    // ==========================================
+
+    const completedTasks =
+        document.getElementById(
+            "completedTasks"
+        );
+
+    if (completedTasks) {
+
+        completedTasks.textContent =
+            completed;
+    }
+
+
+    // ==========================================
+    // PENDING TASKS CARD
+    // ==========================================
+
+    const pendingTasks =
+        document.getElementById(
+            "pendingTasks"
+        );
+
+    if (pendingTasks) {
+
+        pendingTasks.textContent =
+            pending;
     }
 }
 
@@ -400,7 +499,6 @@ function escapeAttribute(text) {
         .replace(/'/g, "\\'")
         .replace(/"/g, "&quot;")
         .replace(/\n/g, " ");
-
 }
 
 
@@ -415,6 +513,7 @@ function toggleTaskList() {
             "taskList"
         );
 
+
     const controls =
         document.getElementById(
             "taskControls"
@@ -426,17 +525,22 @@ function toggleTaskList() {
 
     if (
         taskList.style.display ===
-        "none" ||
-        taskList.style.display === ""
+            "none" ||
+
+        taskList.style.display ===
+            ""
     ) {
 
         taskList.style.display =
             "block";
 
+
         if (controls) {
+
             controls.style.display =
                 "block";
         }
+
 
         loadTasks();
 
@@ -445,11 +549,12 @@ function toggleTaskList() {
         taskList.style.display =
             "none";
 
+
         if (controls) {
+
             controls.style.display =
                 "none";
         }
-
     }
 }
 
@@ -465,10 +570,12 @@ function handleTaskSearch() {
             "taskSearch"
         );
 
+
     const filterSelect =
         document.getElementById(
             "taskFilter"
         );
+
 
     const taskList =
         document.getElementById(
@@ -477,6 +584,7 @@ function handleTaskSearch() {
 
 
     if (!searchInput || !taskList) {
+
         return;
     }
 
@@ -533,7 +641,6 @@ function handleTaskSearch() {
             filterMatch =
                 taskStatus ===
                 "pending";
-
         }
 
 
@@ -545,7 +652,6 @@ function handleTaskSearch() {
             filterMatch =
                 taskStatus ===
                 "completed";
-
         }
 
 
@@ -561,7 +667,6 @@ function handleTaskSearch() {
 
             taskItem.style.display =
                 "none";
-
         }
 
     });
@@ -598,6 +703,7 @@ function showTaskSuggestions(
         !suggestionBox ||
         !taskList
     ) {
+
         return;
     }
 
@@ -647,9 +753,7 @@ function showTaskSuggestions(
                 suggestions.push(
                     taskText
                 );
-
             }
-
         }
 
     });
@@ -666,6 +770,7 @@ function showTaskSuggestions(
             </div>
 
         `;
+
 
         suggestionBox.style.display =
             "block";
@@ -745,7 +850,6 @@ function selectTaskSuggestion(
 
         searchInput.value =
             task;
-
     }
 
 
@@ -753,7 +857,6 @@ function selectTaskSuggestion(
 
         suggestionBox.style.display =
             "none";
-
     }
 
 
@@ -773,7 +876,6 @@ function handleSearchKey(event) {
     ) {
 
         filterTasks();
-
     }
 }
 
@@ -792,11 +894,11 @@ function filterTasks() {
             "taskSuggestions"
         );
 
+
     if (suggestionBox) {
 
         suggestionBox.style.display =
             "none";
-
     }
 }
 
@@ -814,6 +916,7 @@ document.addEventListener(
                 ".search-wrapper"
             );
 
+
         const suggestionBox =
             document.getElementById(
                 "taskSuggestions"
@@ -830,7 +933,6 @@ document.addEventListener(
 
             suggestionBox.style.display =
                 "none";
-
         }
 
     }
@@ -852,6 +954,7 @@ async function deleteTask(id) {
             "Are you sure you want to delete this task?"
         )
     ) {
+
         return;
     }
 
@@ -894,12 +997,12 @@ async function deleteTask(id) {
 
         loadTasks();
 
+
     } catch (error) {
 
         console.error(error);
 
         alert("Server error");
-
     }
 }
 
@@ -924,6 +1027,7 @@ async function editTask(
         !newText ||
         newText.trim() === ""
     ) {
+
         return;
     }
 
@@ -978,12 +1082,12 @@ async function editTask(
 
         loadTasks();
 
+
     } catch (error) {
 
         console.error(error);
 
         alert("Server error");
-
     }
 }
 
@@ -1043,12 +1147,12 @@ async function completeTask(id) {
 
         loadTasks();
 
+
     } catch (error) {
 
         console.error(error);
 
         alert("Server error");
-
     }
 }
 
@@ -1057,270 +1161,232 @@ async function completeTask(id) {
 // AI ASSISTANT
 // ==========================================
 
-function sendMessage() {
+async function sendMessage() {
 
     const input =
-        document.getElementById(
-            "userInput"
-        );
+        document.getElementById("userInput");
 
     const chatBox =
-        document.getElementById(
-            "chatBox"
-        );
-
+        document.getElementById("chatBox");
 
     if (!input || !chatBox) {
         return;
     }
 
-
     const originalMessage =
         input.value.trim();
 
-
-    const message =
-        originalMessage.toLowerCase();
-
-
-    if (message === "") {
+    if (originalMessage === "") {
         return;
     }
 
+    // ==========================================
+    // SHOW USER MESSAGE
+    // ==========================================
 
     chatBox.innerHTML += `
-
         <div class="user-message">
-
             <strong>You:</strong>
-
-            ${escapeHTML(
-                originalMessage
-            )}
-
+            ${escapeHTML(originalMessage)}
         </div>
-
     `;
-
-
-    let reply =
-        "Sorry, I don't understand that yet. Try asking me about the project, tasks, JWT, MongoDB, backend or technologies.";
-
-
-    // BASIC
-
-    if (
-        message === "hi" ||
-        message === "hello" ||
-        message === "hey"
-    ) {
-
-        reply =
-            "Hello! 👋 How can I help you?";
-
-    }
-
-    else if (
-        message.includes("how are you")
-    ) {
-
-        reply =
-            "I'm doing great! 😊 Ready to help you.";
-
-    }
-
-    else if (
-        message.includes("who are you") ||
-        message.includes("your name")
-    ) {
-
-        reply =
-            "I'm your IntelliLife AI Assistant 🤖.";
-
-    }
-
-    else if (
-        message.includes("what can you do")
-    ) {
-
-        reply =
-            "I can help you with tasks and answer basic project-related questions.";
-
-    }
-
-
-    // PROJECT
-
-    else if (
-        message.includes("project name") ||
-        message.includes("name of the project")
-    ) {
-
-        reply =
-            "The project name is IntelliLife AI. 🚀";
-
-    }
-
-    else if (
-        message.includes("what is this project") ||
-        message.includes("what is intellilife")
-    ) {
-
-        reply =
-            "IntelliLife AI is an intelligent personal and smart campus ecosystem designed to help students manage tasks and access smart features.";
-
-    }
-
-    else if (
-        message.includes("purpose")
-    ) {
-
-        reply =
-            "The main purpose is to make student activities easier by combining smart task management, AI assistance and campus-related features.";
-
-    }
-
-    else if (
-        message.includes("technology") ||
-        message.includes("technologies") ||
-        message.includes("tech stack")
-    ) {
-
-        reply =
-            "Our project uses HTML, CSS, JavaScript, Node.js, Express.js, MongoDB and AI technologies.";
-
-    }
-
-
-    // TECHNICAL
-
-    else if (
-        message.includes("jwt")
-    ) {
-
-        reply =
-            "JWT stands for JSON Web Token. We use it for secure authentication between the frontend and backend.";
-
-    }
-
-    else if (
-        message.includes("mongodb")
-    ) {
-
-        reply =
-            "MongoDB is our database. It stores user and task information.";
-
-    }
-
-    else if (
-        message.includes("backend")
-    ) {
-
-        reply =
-            "Our backend is built using Node.js and Express.js. It handles APIs, authentication and database communication.";
-
-    }
-
-    else if (
-        message.includes("node")
-    ) {
-
-        reply =
-            "Node.js allows us to run JavaScript on the server side and build our backend.";
-
-    }
-
-    else if (
-        message.includes("express")
-    ) {
-
-        reply =
-            "Express.js is a Node.js framework that helps us create APIs and handle backend routes.";
-
-    }
-
-
-    // TASKS
-
-    else if (
-        message.includes("add task") ||
-        message.includes("create task")
-    ) {
-
-        reply =
-            "You can add a new task using the Add Task section. 📝";
-
-    }
-
-    else if (
-        message.includes("show my tasks") ||
-        message.includes("my tasks") ||
-        message.includes("task list")
-    ) {
-
-        reply =
-            "Click the Task List button to view your tasks. 📋";
-
-    }
-
-    else if (
-        message.includes("complete task")
-    ) {
-
-        reply =
-            "Click the ✓ Complete button beside a pending task to mark it as completed. ✅";
-
-    }
-
-    else if (
-        message.includes("delete task")
-    ) {
-
-        reply =
-            "Click the 🗑️ Delete button beside a task to remove it.";
-
-    }
-
-    else if (
-        message.includes("edit task")
-    ) {
-
-        reply =
-            "Click the ✏️ Edit button beside a task and enter the updated task name.";
-
-    }
-
-
-    // GOODBYE
-
-    else if (
-        message === "bye" ||
-        message.includes("goodbye")
-    ) {
-
-        reply =
-            "Goodbye! 👋 Have a great day!";
-
-    }
-
-
-    chatBox.innerHTML += `
-
-        <div class="ai-message">
-
-            <strong>AI:</strong>
-
-            ${reply}
-
-        </div>
-
-    `;
-
 
     input.value = "";
 
     chatBox.scrollTop =
         chatBox.scrollHeight;
+
+
+    // ==========================================
+    // SHOW THINKING
+    // ==========================================
+
+    const thinkingId =
+        "ai-thinking-" + Date.now();
+
+    chatBox.innerHTML += `
+        <div class="ai-message" id="${thinkingId}">
+            <strong>AI:</strong>
+            Thinking... 🤖
+        </div>
+    `;
+
+    chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+
+    try {
+
+        // ==========================================
+        // GET JWT TOKEN
+        // ==========================================
+
+        const token =
+            localStorage.getItem("token");
+
+        if (!token) {
+
+            throw new Error(
+                "Authentication token not found. Please login again."
+            );
+        }
+
+
+        // ==========================================
+        // SEND TO BACKEND AI
+        // ==========================================
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/ai/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            "Bearer " + token
+                    },
+
+                    body: JSON.stringify({
+                        message:
+                            originalMessage
+                    })
+                }
+            );
+
+
+        // ==========================================
+        // GET BACKEND RESPONSE
+        // ==========================================
+
+        const data =
+            await response.json();
+
+
+        // ==========================================
+        // REMOVE THINKING
+        // ==========================================
+
+        const thinkingMessage =
+            document.getElementById(
+                thinkingId
+            );
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+
+
+        // ==========================================
+        // HANDLE BACKEND ERROR
+        // ==========================================
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "AI request failed."
+            );
+        }
+
+
+        // ==========================================
+        // DISPLAY AI RESPONSE
+        // ==========================================
+
+        const reply =
+            data.reply ||
+            "I couldn't generate a response.";
+
+
+        chatBox.innerHTML += `
+            <div class="ai-message">
+
+                <strong>AI:</strong>
+
+                <div>
+                    ${formatAIResponse(reply)}
+                </div>
+
+            </div>
+        `;
+
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+
+
+        // ==========================================
+        // OPTIONAL DEBUG
+        // ==========================================
+
+        console.log(
+            "AI Intent:",
+            data.intent
+        );
+
+        console.log(
+            "AI Reply:",
+            data.reply
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "AI Request Error:",
+            error
+        );
+
+
+        // Remove thinking message
+
+        const thinkingMessage =
+            document.getElementById(
+                thinkingId
+            );
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+
+
+        // Display error
+
+        chatBox.innerHTML += `
+            <div class="ai-message">
+
+                <strong>AI:</strong>
+
+                Sorry, I couldn't connect to the AI service. ❌
+
+                <br>
+
+                <small>
+                    ${escapeHTML(error.message)}
+                </small>
+
+            </div>
+        `;
+
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+    }
+}
+
+
+// ==========================================
+// FORMAT AI RESPONSE
+// ==========================================
+
+function formatAIResponse(text) {
+
+    return escapeHTML(text)
+        .replace(/\n/g, "<br>");
 }
 
 
@@ -1332,7 +1398,6 @@ function go(page) {
 
     window.location.href =
         page;
-
 }
 
 
@@ -1342,9 +1407,15 @@ function go(page) {
 
 function logout() {
 
-    localStorage.removeItem("token");
+    localStorage.removeItem(
+        "token"
+    );
 
-    localStorage.removeItem("user");
+
+    localStorage.removeItem(
+        "user"
+    );
+
 
     window.location.href =
         "login.html";
@@ -1352,7 +1423,322 @@ function logout() {
 
 
 // ==========================================
-// LOAD TASKS ON PAGE LOAD
+// GOAL PROGRESS
 // ==========================================
 
-loadTasks();
+function updateGoalProgress() {
+
+    const goals =
+        JSON.parse(
+            localStorage.getItem(
+                "intelliLifeGoals"
+            )
+        ) || [];
+
+
+    let totalSubtasks = 0;
+
+    let completedSubtasks = 0;
+
+
+    goals.forEach(goal => {
+
+        if (!goal.subtasks) return;
+
+
+        goal.subtasks.forEach(
+            subtask => {
+
+                totalSubtasks++;
+
+
+                if (
+                    subtask.completed
+                ) {
+
+                    completedSubtasks++;
+                }
+
+            }
+        );
+
+    });
+
+
+    const progress =
+        totalSubtasks === 0
+
+            ? 0
+
+            : Math.round(
+                (
+                    completedSubtasks /
+                    totalSubtasks
+                ) * 100
+            );
+
+
+    const goalProgress =
+        document.getElementById(
+            "goalProgress"
+        );
+
+
+    if (goalProgress) {
+
+        goalProgress.textContent =
+            progress + "%";
+    }
+}
+
+
+// ==========================================
+// TODAY'S FOCUS
+// ==========================================
+
+function updateTodayFocus() {
+
+    const plannerData =
+        JSON.parse(
+            localStorage.getItem(
+                "intelliLifePlanner"
+            )
+        ) || [];
+
+
+    const todayFocus =
+        document.getElementById(
+            "todayFocus"
+        );
+
+
+    if (!todayFocus) return;
+
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+
+    const todayTasks =
+        plannerData.filter(task => {
+
+            return (
+                task.date === today &&
+                task.completed !== true
+            );
+
+        });
+
+
+    if (
+        todayTasks.length === 0
+    ) {
+
+        todayFocus.textContent =
+            "No tasks for today";
+
+    } else {
+
+        todayFocus.textContent =
+            todayTasks.length +
+            (
+                todayTasks.length === 1
+                    ? " task for today"
+                    : " tasks for today"
+            );
+    }
+}
+
+
+// ==========================================
+// PLANNER UPCOMING COUNT
+// ==========================================
+
+function updatePlannerCount() {
+
+    const plannerData =
+        JSON.parse(
+            localStorage.getItem(
+                "intelliLifePlanner"
+            )
+        ) || [];
+
+
+    const plannerCount =
+        document.getElementById(
+            "plannerCount"
+        );
+
+
+    if (!plannerCount) return;
+
+
+    const now =
+        new Date();
+
+
+    const today =
+        now.getFullYear() +
+        "-" +
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+
+    const upcomingTasks =
+        plannerData.filter(task => {
+
+            return (
+                task.date > today &&
+                task.completed !== true
+            );
+
+        });
+
+
+    plannerCount.textContent =
+        upcomingTasks.length;
+}
+
+
+// ==========================================
+// FINANCE AMOUNT
+// ==========================================
+
+function updateFinanceAmount() {
+
+    const transactions =
+        JSON.parse(
+            localStorage.getItem(
+                "intelliLifeFinance"
+            )
+        ) || [];
+
+
+    const financeAmount =
+        document.getElementById(
+            "financeAmount"
+        );
+
+
+    if (!financeAmount) return;
+
+
+    const currentMonth =
+        new Date().getMonth();
+
+
+    const currentYear =
+        new Date().getFullYear();
+
+
+    const thisMonthTransactions =
+        transactions.filter(
+            transaction => {
+
+                const transactionDate =
+                    new Date(
+                        transaction.date
+                    );
+
+
+                return (
+                    transactionDate.getMonth() ===
+                        currentMonth &&
+
+                    transactionDate.getFullYear() ===
+                        currentYear
+                );
+
+            }
+        );
+
+
+    const totalIncome =
+        thisMonthTransactions
+            .filter(
+                transaction =>
+                    transaction.type ===
+                    "income"
+            )
+            .reduce(
+                (
+                    sum,
+                    transaction
+                ) =>
+                    sum +
+                    Number(
+                        transaction.amount
+                    ),
+                0
+            );
+
+
+    const totalExpense =
+        thisMonthTransactions
+            .filter(
+                transaction =>
+                    transaction.type ===
+                    "expense"
+            )
+            .reduce(
+                (
+                    sum,
+                    transaction
+                ) =>
+                    sum +
+                    Number(
+                        transaction.amount
+                    ),
+                0
+            );
+
+
+    const balance =
+        totalIncome -
+        totalExpense;
+
+
+    financeAmount.textContent =
+        "₹" + balance;
+}
+
+
+// ==========================================
+// INITIALIZE DASHBOARD
+// ==========================================
+
+function initializeDashboard() {
+
+    updateTaskCardsFromPlanner();
+
+    updateGoalProgress();
+
+    updateTodayFocus();
+
+    updatePlannerCount();
+
+    updateFinanceAmount();
+
+    loadTasks();
+}
+
+
+// ==========================================
+// PAGE LOAD
+// ==========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        initializeDashboard();
+
+    }
+);

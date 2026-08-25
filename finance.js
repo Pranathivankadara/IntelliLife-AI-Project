@@ -1,4 +1,5 @@
-let transactions = [];
+let transactions =
+    JSON.parse(localStorage.getItem("intelliLifeFinance")) || [];
 
 
 // ===============================
@@ -103,7 +104,10 @@ function addTransaction(event) {
 
 
     transactions.push(transaction);
-
+    localStorage.setItem(
+    "intelliLifeFinance",
+    JSON.stringify(transactions)
+);
 
     updateFinance();
 

@@ -561,6 +561,9 @@ footer {
     background: #171a2b;
 
     color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .footer-logo {

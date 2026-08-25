@@ -79,7 +79,6 @@ function getDateKey(date) {
             date.getDate()
         ).padStart(2, "0");
 
-
     return `${year}-${month}-${day}`;
 }
 
@@ -90,9 +89,12 @@ function getDateKey(date) {
 
 function formatTime(time) {
 
+    if (!time) {
+        return "";
+    }
+
     const [hours, minutes] =
         time.split(":");
-
 
     let hour =
         parseInt(hours);
@@ -100,10 +102,8 @@ function formatTime(time) {
     const period =
         hour >= 12 ? "PM" : "AM";
 
-
     hour =
         hour % 12 || 12;
-
 
     return `${hour}:${minutes} ${period}`;
 }
@@ -119,7 +119,6 @@ function saveTasks() {
         "intelliLifePlanner",
         JSON.stringify(tasks)
     );
-
 }
 
 
@@ -137,10 +136,8 @@ function updateDateDisplay() {
             }
         );
 
-
     const date =
         selectedDate.getDate();
-
 
     const monthYear =
         selectedDate.toLocaleDateString(
@@ -151,22 +148,17 @@ function updateDateDisplay() {
             }
         );
 
-
     document.getElementById("dayName")
         .innerText = day;
-
 
     document.getElementById("dateNumber")
         .innerText =
         String(date).padStart(2, "0");
 
-
     document.getElementById("monthYear")
         .innerText = monthYear;
 
-
     renderTasks();
-
 }
 
 
@@ -180,9 +172,7 @@ function changeDay(amount) {
         selectedDate.getDate() + amount
     );
 
-
     updateDateDisplay();
-
 }
 
 
@@ -195,31 +185,50 @@ function goToToday() {
     selectedDate =
         new Date();
 
-
     updateDateDisplay();
-
 }
 
 
 /* =========================================
-   TODAY TASKS
+   SELECTED DATE TASKS
 ========================================= */
 
-function getTodayTasks() {
+function getSelectedDateTasks() {
 
     const dateKey =
         getDateKey(selectedDate);
 
-
     return tasks
         .filter(
-            task => task.date === dateKey
+            task =>
+                task.date === dateKey
         )
         .sort(
             (a, b) =>
                 a.time.localeCompare(b.time)
         );
+}
 
+
+/* =========================================
+   ALL SAVED TASKS
+========================================= */
+
+function getAllTasks() {
+
+    return [...tasks].sort(
+        (a, b) => {
+
+            const dateCompare =
+                a.date.localeCompare(b.date);
+
+            if (dateCompare !== 0) {
+                return dateCompare;
+            }
+
+            return a.time.localeCompare(b.time);
+        }
+    );
 }
 
 
@@ -229,48 +238,98 @@ function getTodayTasks() {
 
 function renderTasks() {
 
-    const todayTasks =
-        getTodayTasks();
+    /*
+       IMPORTANT:
+
+       Today's Schedule
+       → selected date tasks
+
+       My Tasks
+       → ALL saved Planner tasks
+    */
+
+    const selectedDateTasks =
+        getSelectedDateTasks();
+
+    const allTasks =
+        getAllTasks();
 
 
-    const filter =
+    const filterElement =
         document.getElementById(
             "taskFilter"
-        ).value;
+        );
+
+    const filter =
+        filterElement
+            ? filterElement.value
+            : "All";
 
 
     let filteredTasks =
-        todayTasks;
+        allTasks;
 
 
-    if (filter === "Pending") {
+    /* =====================================
+       ALL
+    ===================================== */
+
+    if (filter === "All") {
 
         filteredTasks =
-            todayTasks.filter(
-                task => !task.completed
-            );
-
+            allTasks;
     }
 
 
-    if (filter === "Completed") {
+    /* =====================================
+       PENDING
+    ===================================== */
+
+    else if (filter === "Pending") {
 
         filteredTasks =
-            todayTasks.filter(
-                task => task.completed
+            allTasks.filter(
+                task =>
+                    task.completed !== true
             );
-
     }
 
 
-    renderSchedule(todayTasks);
+    /* =====================================
+       COMPLETED
+    ===================================== */
 
-    renderTaskList(filteredTasks);
+    else if (filter === "Completed") {
 
-    updateSummary(todayTasks);
+        filteredTasks =
+            allTasks.filter(
+                task =>
+                    task.completed === true
+            );
+    }
 
-    updatePriority(todayTasks);
 
+    /* =====================================
+       RENDER BOTH SECTIONS
+    ===================================== */
+
+    renderSchedule(
+        selectedDateTasks
+    );
+
+    renderTaskList(
+        filteredTasks
+    );
+
+
+    /*
+       Summary is for the selected day,
+       exactly like the Planner page
+       originally intended.
+    */
+
+    updateSummary(allTasks);
+updatePriority(selectedDateTasks);
 }
 
 
@@ -285,18 +344,27 @@ function renderSchedule(todayTasks) {
             "scheduleList"
         );
 
+    if (!container) {
+        return;
+    }
 
     container.innerHTML = "";
 
 
-    document.getElementById(
-        "scheduleCount"
-    ).innerText =
-        `${todayTasks.length} ${
-            todayTasks.length === 1
-                ? "Task"
-                : "Tasks"
-        }`;
+    const scheduleCount =
+        document.getElementById(
+            "scheduleCount"
+        );
+
+    if (scheduleCount) {
+
+        scheduleCount.innerText =
+            `${todayTasks.length} ${
+                todayTasks.length === 1
+                    ? "Task"
+                    : "Tasks"
+            }`;
+    }
 
 
     if (todayTasks.length === 0) {
@@ -357,7 +425,7 @@ function renderSchedule(todayTasks) {
                     ${
                         task.completed
                             ? "Done"
-                            : task.priority
+                            : escapeHTML(task.priority)
                     }
 
                 </span>
@@ -367,7 +435,6 @@ function renderSchedule(todayTasks) {
         `;
 
     });
-
 }
 
 
@@ -382,6 +449,9 @@ function renderTaskList(taskList) {
             "tasksList"
         );
 
+    if (!container) {
+        return;
+    }
 
     container.innerHTML = "";
 
@@ -451,6 +521,8 @@ function renderTaskList(taskList) {
                         ${formatTime(task.time)}
                         •
                         ${escapeHTML(task.category)}
+                        •
+                        ${formatDateForDisplay(task.date)}
                     </p>
 
                 </div>
@@ -462,7 +534,7 @@ function renderTaskList(taskList) {
                         ${priorityClass}
                     ">
 
-                    ${task.priority}
+                    ${escapeHTML(task.priority)}
 
                 </span>
 
@@ -476,6 +548,7 @@ function renderTaskList(taskList) {
                         ✎
 
                     </button>
+
 
                     <button
                         class="delete-task"
@@ -493,7 +566,32 @@ function renderTaskList(taskList) {
         `;
 
     });
+}
 
+
+/* =========================================
+   FORMAT TASK DATE
+========================================= */
+
+function formatDateForDisplay(dateString) {
+
+    if (!dateString) {
+        return "";
+    }
+
+    const date =
+        new Date(
+            dateString + "T00:00:00"
+        );
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
 
 
@@ -509,47 +607,87 @@ function updateSummary(todayTasks) {
 
     const completed =
         todayTasks.filter(
-            task => task.completed
+            task =>
+                task.completed === true
         ).length;
 
 
     const pending =
-        total - completed;
+        todayTasks.filter(
+            task =>
+                task.completed !== true
+        ).length;
 
 
     const percentage =
         total === 0
             ? 0
             : Math.round(
-                (completed / total) * 100
+                (
+                    completed /
+                    total
+                ) * 100
             );
 
 
-    document.getElementById(
-        "totalTasks"
-    ).innerText = total;
+    const totalElement =
+        document.getElementById(
+            "totalTasks"
+        );
+
+    if (totalElement) {
+
+        totalElement.innerText =
+            total;
+    }
 
 
-    document.getElementById(
-        "completedTasks"
-    ).innerText = completed;
+    const completedElement =
+        document.getElementById(
+            "completedTasks"
+        );
+
+    if (completedElement) {
+
+        completedElement.innerText =
+            completed;
+    }
 
 
-    document.getElementById(
-        "pendingTasks"
-    ).innerText = pending;
+    const pendingElement =
+        document.getElementById(
+            "pendingTasks"
+        );
+
+    if (pendingElement) {
+
+        pendingElement.innerText =
+            pending;
+    }
 
 
-    document.getElementById(
-        "progressPercent"
-    ).innerText =
-        percentage + "%";
+    const progressElement =
+        document.getElementById(
+            "progressPercent"
+        );
+
+    if (progressElement) {
+
+        progressElement.innerText =
+            percentage + "%";
+    }
 
 
-    document.getElementById(
-        "circlePercent"
-    ).innerText =
-        percentage + "%";
+    const circleElement =
+        document.getElementById(
+            "circlePercent"
+        );
+
+    if (circleElement) {
+
+        circleElement.innerText =
+            percentage + "%";
+    }
 
 
     updateProgressCircle(
@@ -562,6 +700,10 @@ function updateSummary(todayTasks) {
             "progressText"
         );
 
+    if (!progressText) {
+        return;
+    }
+
 
     if (total === 0) {
 
@@ -569,25 +711,26 @@ function updateSummary(todayTasks) {
             "Getting started";
 
     }
+
     else if (percentage === 100) {
 
         progressText.innerText =
             "Great job!";
 
     }
+
     else if (percentage >= 50) {
 
         progressText.innerText =
             "Good progress";
 
     }
+
     else {
 
         progressText.innerText =
             "Keep going";
-
     }
-
 }
 
 
@@ -597,17 +740,25 @@ function updateSummary(todayTasks) {
 
 function updateProgressCircle(percent) {
 
+    const circle =
+        document.querySelector(
+            ".progress-circle"
+        );
+
+    if (!circle) {
+        return;
+    }
+
+
     const degree =
         percent * 3.6;
 
 
-    document.querySelector(
-        ".progress-circle"
-    ).style.background = `conic-gradient(
-        #6957d8 ${degree}deg,
-        #eeeef3 ${degree}deg
-    )`;
-
+    circle.style.background =
+        `conic-gradient(
+            #6957d8 ${degree}deg,
+            #eeeef3 ${degree}deg
+        )`;
 }
 
 
@@ -617,29 +768,49 @@ function updateProgressCircle(percent) {
 
 function updatePriority(todayTasks) {
 
-    document.getElementById(
-        "highCount"
-    ).innerText =
-        todayTasks.filter(
-            task => task.priority === "High"
-        ).length;
+    const highCount =
+        document.getElementById(
+            "highCount"
+        );
+
+    if (highCount) {
+
+        highCount.innerText =
+            todayTasks.filter(
+                task =>
+                    task.priority === "High"
+            ).length;
+    }
 
 
-    document.getElementById(
-        "mediumCount"
-    ).innerText =
-        todayTasks.filter(
-            task => task.priority === "Medium"
-        ).length;
+    const mediumCount =
+        document.getElementById(
+            "mediumCount"
+        );
+
+    if (mediumCount) {
+
+        mediumCount.innerText =
+            todayTasks.filter(
+                task =>
+                    task.priority === "Medium"
+            ).length;
+    }
 
 
-    document.getElementById(
-        "lowCount"
-    ).innerText =
-        todayTasks.filter(
-            task => task.priority === "Low"
-        ).length;
+    const lowCount =
+        document.getElementById(
+            "lowCount"
+        );
 
+    if (lowCount) {
+
+        lowCount.innerText =
+            todayTasks.filter(
+                task =>
+                    task.priority === "Low"
+            ).length;
+    }
 }
 
 
@@ -651,7 +822,8 @@ function toggleTask(id) {
 
     const task =
         tasks.find(
-            item => item.id === id
+            item =>
+                item.id === id
         );
 
 
@@ -667,7 +839,6 @@ function toggleTask(id) {
     saveTasks();
 
     renderTasks();
-
 }
 
 
@@ -698,12 +869,14 @@ function openTaskModal() {
 
     document.getElementById(
         "taskPriority"
-    ).value = "Medium";
+    ).value =
+        "Medium";
 
 
     document.getElementById(
         "taskCategory"
-    ).value = "Study";
+    ).value =
+        "Study";
 
 
     document.getElementById(
@@ -714,7 +887,6 @@ function openTaskModal() {
     document.getElementById(
         "taskModal"
     ).classList.add("show");
-
 }
 
 
@@ -727,7 +899,6 @@ function closeTaskModal() {
     document.getElementById(
         "taskModal"
     ).classList.remove("show");
-
 }
 
 
@@ -784,14 +955,17 @@ document.getElementById(
         }
 
 
-        /* EDIT */
+        /* =====================================
+           EDIT
+        ===================================== */
 
         if (editingTaskId !== null) {
 
             const task =
                 tasks.find(
                     item =>
-                        item.id === editingTaskId
+                        item.id ===
+                        editingTaskId
                 );
 
 
@@ -811,13 +985,14 @@ document.getElementById(
 
                 task.description =
                     description;
-
             }
 
         }
 
 
-        /* NEW TASK */
+        /* =====================================
+           NEW TASK
+        ===================================== */
 
         else {
 
@@ -865,7 +1040,8 @@ function editTask(id) {
 
     const task =
         tasks.find(
-            item => item.id === id
+            item =>
+                item.id === id
         );
 
 
@@ -916,7 +1092,6 @@ function editTask(id) {
     document.getElementById(
         "taskModal"
     ).classList.add("show");
-
 }
 
 
@@ -939,14 +1114,14 @@ function deleteTask(id) {
 
     tasks =
         tasks.filter(
-            task => task.id !== id
+            task =>
+                task.id !== id
         );
 
 
     saveTasks();
 
     renderTasks();
-
 }
 
 
@@ -954,35 +1129,56 @@ function deleteTask(id) {
    CLOSE MODAL OUTSIDE
 ========================================= */
 
-document.getElementById(
-    "taskModal"
-).addEventListener(
-    "click",
-    function(event) {
+const taskModal =
+    document.getElementById(
+        "taskModal"
+    );
 
-        if (event.target === this) {
+if (taskModal) {
 
-            closeTaskModal();
+    taskModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                this
+            ) {
+
+                closeTaskModal();
+            }
 
         }
-
-    }
-);
+    );
+}
 
 
 /* =========================================
    LOGOUT
 ========================================= */
 
-function logoutUser() {
+function logout() {
 
-    localStorage.removeItem("token");
+    localStorage.removeItem(
+        "token"
+    );
 
-    localStorage.removeItem("user");
+    localStorage.removeItem(
+        "user"
+    );
 
     window.location.href =
         "login.html";
+}
 
+
+/* =========================================
+   BACKWARD COMPATIBILITY
+========================================= */
+
+function logoutUser() {
+
+    logout();
 }
 
 
@@ -993,13 +1189,14 @@ function logoutUser() {
 function escapeHTML(text) {
 
     const div =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     div.textContent =
         text || "";
 
     return div.innerHTML;
-
 }
 
 
